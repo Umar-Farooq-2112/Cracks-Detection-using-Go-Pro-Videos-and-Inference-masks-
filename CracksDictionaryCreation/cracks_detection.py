@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
-from basic_function import *
+from basic_function import filter_color
 
-def detect_cracks(mask):
+def detect_cracks(image, mask, nFrame):
     mask = filter_color(mask)
     mask = ~mask
     binary_mask = mask.copy()    
@@ -20,8 +20,34 @@ def detect_cracks(mask):
 
     contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
+
+    
     # Check if contours are found
     if contours:
         return contours
     else:
         return None
+
+if __name__ == "__main__":
+    
+    outputDir = 'Testing'
+    image_dir = outputDir + '/images'
+    mask_dir = outputDir + '/Reconstructions_Inference'
+    
+    
+    image = cv2.imread(f"{image_dir}/00000015.png")
+    mask = cv2.imread(f"{mask_dir}/00000015.png")
+    
+    
+    contours = detect_cracks(image,mask,0)
+    if contours is not None:
+        for contour in contours:
+            bBox = cv2.boundingRect(contour)
+            x, y, w, h = bBox
+            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)  # Green color, 2 px thickness
+    
+    cv2.imshow("image",cv2.resize(image,(800,600)))
+    print(len(contours))
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    

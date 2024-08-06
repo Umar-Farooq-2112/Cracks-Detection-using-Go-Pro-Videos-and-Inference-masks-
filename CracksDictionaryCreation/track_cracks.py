@@ -57,14 +57,21 @@ def track_cracks(images_dir, masks_dir,  load_json):
             count = 1
             tracked_array = []
             for contour in contours:
-                bBox = str(cv2.boundingRect(contour)) #+ '_' + nFrame
+                bBox = cv2.boundingRect(contour) #+ '_' + nFrame
+                x, y, w, h = bBox
+                bBox = str(bBox) #+ '_' + nFrame
                 bBox = tuple(map(int, bBox.strip("()").split(", ")))
                 bBox = list(bBox)
                 area = cv2.contourArea(contour)
                 t = {"pothole_num": count, "bbox": bBox, "area": area}
                 tracked_array.append(t)
                 # tracked_array.append(tracked_p)
+                temp_image = image.copy()
+                cv2.rectangle(temp_image, (x, y), (x + w, y + h), (0, 255, 0), 2)  # Green color, 2 px thickness
+                cv2.imwrite(f"Testing/Output/{nFrame}_{count}.png",temp_image)
+
                 count += 1
+                
         iteration = int(nFrame)
 
 
