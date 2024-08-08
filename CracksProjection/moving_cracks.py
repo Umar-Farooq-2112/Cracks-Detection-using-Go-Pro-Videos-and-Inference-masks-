@@ -1,9 +1,8 @@
 import cv2
 import numpy as np
 import os
-from projection import forward_projection
-from iou import calculate_iou,calculate_iou_backwards
-
+from CracksProjection.projection import forward_projection
+from CracksProjection.iou import calculate_iou,calculate_iou_backwards
 
 
 keyHead = "Potholes"

@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from basic_function import filter_color
+from CracksDictionaryCreation.basic_function import filter_color
 
 def detect_cracks(image, mask, nFrame):
     mask = filter_color(mask)

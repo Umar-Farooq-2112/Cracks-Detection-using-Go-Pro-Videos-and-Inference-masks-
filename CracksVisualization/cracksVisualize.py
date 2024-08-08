@@ -25,6 +25,9 @@ def visualize_potholes(images_dir, masks_dir):
         iterator += 1
         nFrame = frame_id + ".png"
         img = cv2.imread((os.path.join(images_dir, nFrame)))
+        mask = cv2.imread((os.path.join(masks_dir, nFrame)))
+        
+        temp_img = img.copy()
         save = False
         for pothole_data in frame_data["PotholesData"]:
             save = False
@@ -56,6 +59,10 @@ def visualize_potholes(images_dir, masks_dir):
                 imgToSave = img.copy()
                 cv2.rectangle(imgToSave, (x, y), (x + w, y + h), color, thickness)
                 cv2.putText(imgToSave, scoreText, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
+                cv2.rectangle(temp_img, (x, y), (x + w, y + h), color, thickness)
+                cv2.putText(temp_img, scoreText, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
+                cv2.rectangle(mask, (x, y), (x + w, y + h), color, thickness)
+                cv2.putText(temp_img, scoreText, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
 
         # for bboxes in
                 if save:
@@ -69,7 +76,19 @@ def visualize_potholes(images_dir, masks_dir):
                     print(nFrame)
                     save_img = save_img + '/' + frame_id + '_'  + f"{pothole_num}.png"
                     print("Saving: ", save_img)
-                    cv2.imwrite(save_img, imgToSave)
+                    cv2.imwrite(save_img, temp_img)
+                    cv2.imwrite(save_img + '/' + frame_id + '_'  + f"{pothole_num}.png", mask)
+
+            savePath, filename = os.path.split(images_dir)
+            save_img = savePath + '/TestingResults'
+            if not os.path.exists(save_img):
+                os.mkdir(save_img)
+            save_img = save_img + '/' + frame_id + '_cracks.png'
+            # print("Saving: ", save_img)
+            cv2.imwrite(save_img, temp_img)
+            
+            
+            
     average = sum(score_list) / len(score_list)
 
     # Calculate min and max

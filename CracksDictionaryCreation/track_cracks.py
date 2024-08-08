@@ -2,8 +2,8 @@ import json
 import cv2
 import numpy as np
 import os
-from perspectiveMatrixTransform import find_features
-from cracks_detection import detect_cracks
+from CracksDictionaryCreation.perspectiveMatrixTransform import find_features
+from CracksDictionaryCreation.cracks_detection import detect_cracks
 
 
 def track_cracks(images_dir, masks_dir,  load_json):
@@ -41,6 +41,7 @@ def track_cracks(images_dir, masks_dir,  load_json):
         print("nFrame: ", nFrame)
         tracked_array = []
         image = cv2.imread(os.path.join(images_dir, filename))
+        mask = cv2.imread(os.path.join(masks_dir, filename))
         nextFrame = int(nFrame) + 1
         save_json, filenames = os.path.split(images_dir)
         save_json = save_json + "/testing_potholes.json"
@@ -50,6 +51,8 @@ def track_cracks(images_dir, masks_dir,  load_json):
         print(masks_dir , filename)
         potholeMask = cv2.imread(os.path.join(masks_dir, filename))
         potholeMask = cv2.resize(potholeMask, (1920, 1080))
+        temp_image = image.copy()
+        temp_mask = mask.copy()
 
         contours = detect_cracks(image, potholeMask, f"{masks_dir}/output/{filename}")
 
@@ -66,14 +69,15 @@ def track_cracks(images_dir, masks_dir,  load_json):
                 t = {"pothole_num": count, "bbox": bBox, "area": area}
                 tracked_array.append(t)
                 # tracked_array.append(tracked_p)
-                temp_image = image.copy()
-                cv2.rectangle(temp_image, (x, y), (x + w, y + h), (0, 255, 0), 2)  # Green color, 2 px thickness
-                cv2.imwrite(f"Testing/Output/{nFrame}_{count}.png",temp_image)
+                cv2.rectangle(temp_image, (x, y), (x + w, y + h), (0, 0, 0), 2)  # Green color, 2 px thickness
+                cv2.rectangle(temp_mask, (x, y), (x + w, y + h), (0, 0, 0), 2)  # Green color, 2 px thickness
 
                 count += 1
                 
         iteration = int(nFrame)
 
+        cv2.imwrite(f"Testing/Output/{nFrame}_image.png",temp_image)
+        cv2.imwrite(f"Testing/Output/{nFrame}_mask.png",temp_mask)
 
         if iteration <= final_length:
             image2 = cv2.imread(os.path.join(images_dir, filename2))

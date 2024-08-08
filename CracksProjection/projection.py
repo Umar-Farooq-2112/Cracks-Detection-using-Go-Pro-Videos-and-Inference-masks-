@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
-from boundingBox import is_bbox_inside_image_backward,is_bbox_inside_image
+
+from CracksProjection.boundingBox import is_bbox_inside_image_backward,is_bbox_inside_image
 
 
 def forward_projection(bbox, perspective_matrices, image2, isBackward=False):
