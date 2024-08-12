@@ -60,9 +60,9 @@ def visualize_potholes(images_dir, masks_dir):
                 cv2.rectangle(imgToSave, (x, y), (x + w, y + h), color, thickness)
                 cv2.putText(imgToSave, scoreText, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
                 cv2.rectangle(temp_img, (x, y), (x + w, y + h), color, thickness)
-                cv2.putText(temp_img, scoreText, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
-                cv2.rectangle(mask, (x, y), (x + w, y + h), color, thickness)
-                cv2.putText(temp_img, scoreText, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
+                cv2.putText(temp_img, scoreText, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0, 255), 2)
+                cv2.rectangle(mask, (x, y), (x + w, y + h), (255,0,0), thickness)
+                cv2.putText(mask, scoreText, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 2, (255,0,0), 2)
 
         # for bboxes in
                 if save:
@@ -83,9 +83,10 @@ def visualize_potholes(images_dir, masks_dir):
             save_img = savePath + '/TestingResults'
             if not os.path.exists(save_img):
                 os.mkdir(save_img)
-            save_img = save_img + '/' + frame_id + '_cracks.png'
+            # save_img = save_img + '/' + frame_id + '_cracks.png'
             # print("Saving: ", save_img)
-            cv2.imwrite(save_img, temp_img)
+            cv2.imwrite(save_img + '/' + frame_id + '_image.png', temp_img)
+            cv2.imwrite(save_img + '/' + frame_id + '_mask.png', mask)
             
             
             
