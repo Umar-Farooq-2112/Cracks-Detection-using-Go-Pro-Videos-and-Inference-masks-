@@ -126,13 +126,13 @@ def track_cracks(images_dir, p = {}, old_potholes = {}, save_json = "", old_json
                     bBox_ij = bBoxDic[j][box]  # Jth boundingBox retrieved
                     # print(bBoxDic)[j]
                     cntrArea = bBoxDic[j][area]
-                    if cntrArea < 1500:
-                        continue
+                    # if cntrArea < 1500:
+                    #     continue
                     #####################################
                     x2, y2, w2, h2 = bBox_ij
                     box_bottom = y2 + h2
-                    if box_bottom >= image1.shape[0]:
-                        continue
+                    # if box_bottom >= image1.shape[0]:
+                    #     continue
 
                     ###############################
                     savingBox = list(bBox_ij)
@@ -149,8 +149,8 @@ def track_cracks(images_dir, p = {}, old_potholes = {}, save_json = "", old_json
                             duplicate_pothole_list, score, max_possible_count, detected_count, has_passed, tranformed_box, forward_list, backward_list = going_forward(bBox_ij, current_image, nFrame, p, current_i,
                                                                    duplicate_pothole_list, startFrame, endFrame, images_dir)
 
-                            if score < 10:
-                                continue
+                            # if score < 10:
+                            #     continue
                             unique_pothole_list.append(pair)
                             if tranformed_box is not None:
                                 # perspective_matrix = perspective_matrix.tolist()#["tran_matrix"])  # Got
@@ -164,12 +164,12 @@ def track_cracks(images_dir, p = {}, old_potholes = {}, save_json = "", old_json
                                 tranformed_box = list(tranformed_box)
                                 print("transformed box: ", tranformed_box)
                                 print(type(tranformed_box))
-                            cropped_image = img_crop[y:y + h, x:x + w]
+                            # cropped_image = img_crop[y:y + h, x:x + w]
                             save_name = nFrame + "_" + f"{count}" + ".png"
-                            save_cropped = cropped_path + "/" + save_name
-                            print("Crop Path: ", save_cropped)
-                            print(cropped_path)
-                            cv2.imwrite(save_cropped, cropped_image)
+                            # save_cropped = cropped_path + "/" + save_name
+                            # print("Crop Path: ", save_cropped)
+                            # print(cropped_path)
+                            # cv2.imwrite(save_cropped, cropped_image)
                             t = {"pothole_num": count, "bbox": savingBox, "area": cntrArea, "Score": score, "possible_count": max_possible_count, "detected_count": detected_count
                                  , "hasPassed": has_passed, "transformedBox": tranformed_box, "forward_list": forward_list, "backward_list": backward_list, "cropped_img": save_name}
                             count += 1

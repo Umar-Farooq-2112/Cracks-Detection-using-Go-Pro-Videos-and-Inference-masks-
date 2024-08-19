@@ -26,9 +26,9 @@ def forward_projection(bbox, perspective_matrices, image2, isBackward=False):
         # print("Its Shape: ", transformed_bbox.shape)
     # Load image 2
     # Draw the transformed bounding box on image 2
-    cv2.polylines(image2, np.int32([transformed_bbox]), True, (0, 255, 0), 2)
+    # cv2.polylines(image2, np.int32([transformed_bbox]), True, (0, 255, 0), 2)
     # Visualize the result
-    image2 = cv2.resize(image2, (600,600))
+    # image2 = cv2.resize(image2, (600,600))
     image_size = (1920, 1080)
     is_Inside = is_bbox_inside_image(transformed_bbox, image_size)
     # cv2.imshow("Image 2 with transformed bounding box", image2)
@@ -42,5 +42,5 @@ def forward_projection(bbox, perspective_matrices, image2, isBackward=False):
     # print("Transformed Bounding Box Coords: ", transformed_bbox)
 
     # cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.destroyAllWindows()
     return is_Inside, transformed_bbox

@@ -165,7 +165,7 @@ def going_forward(bbox_ij, img, nFrame, p,  i, duplicate_list_original, startFra
                         print("IOU : ", iou)
                         # print("Box1: ", bbox_ij)
                         # print("Box2: ", current_box)
-                        if iou * 100 > 0:
+                        if iou * 100 > 33:
                             print("IOU: ", iou * 100)
                             # max_detected_count += 1
                             duplicate_pair = (next_i, current_box)
@@ -225,7 +225,7 @@ def going_forward(bbox_ij, img, nFrame, p,  i, duplicate_list_original, startFra
                         print("current_box: ", current_box)
                         iou = calculate_iou_backwards(transformed_bbox, current_box, image2, image2)
                         print("Iou: ", iou)
-                        if iou * 100 > 0:
+                        if iou * 100 > 33:
                             # print("IOU: ", iou * 100)
                             # max_detected_count += 1
                             duplicate_pair = (prev_i, current_box)

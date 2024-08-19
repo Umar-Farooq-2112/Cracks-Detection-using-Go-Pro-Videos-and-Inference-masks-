@@ -2,8 +2,9 @@ import json
 import cv2
 import numpy as np
 import os
-from CracksDictionaryCreation.perspectiveMatrixTransform import find_features
+# from CracksDictionaryCreation.perspectiveMatrixTransform import find_features
 from CracksDictionaryCreation.cracks_detection import detect_cracks
+from CracksDictionaryCreation.HomographyCalculation import getSIFTkeypoints
 
 
 def track_cracks(images_dir, masks_dir,  load_json):
@@ -81,7 +82,8 @@ def track_cracks(images_dir, masks_dir,  load_json):
 
         if iteration <= final_length:
             image2 = cv2.imread(os.path.join(images_dir, filename2))
-            current_to_next_perspective = find_features(image_0=imgcopy, image_1=image2)
+            # current_to_next_perspective = find_features(image_0=imgcopy, image_1=image2)
+            current_to_next_perspective = getSIFTkeypoints(imgcopy, image2)
             print(current_to_next_perspective)
             stored_matrices.append(current_to_next_perspective)
 

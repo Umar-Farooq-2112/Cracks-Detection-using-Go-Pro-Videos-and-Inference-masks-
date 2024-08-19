@@ -26,8 +26,9 @@ def visualize_potholes(images_dir, masks_dir):
         nFrame = frame_id + ".png"
         img = cv2.imread((os.path.join(images_dir, nFrame)))
         mask = cv2.imread((os.path.join(masks_dir, nFrame)))
-        
+        mask2 = mask.copy()
         temp_img = img.copy()
+        
         save = False
         for pothole_data in frame_data["PotholesData"]:
             save = False
@@ -37,7 +38,9 @@ def visualize_potholes(images_dir, masks_dir):
             detected = pothole_data["detected_count"]
             pothole_num = pothole_data["pothole_num"]
 
-            if score >= 50 and detected > 1:
+            # if score >= 33 and detected > 1:
+            # if score >= 33:
+            if True:
                 score_list.append(score)
                 score = "{:.2f}".format(score)
                 area  = pothole_data["area"]
@@ -50,20 +53,21 @@ def visualize_potholes(images_dir, masks_dir):
                 print("  Detected Count:", pothole_data["detected_count"])
                 print("  Detected Area:", pothole_data["area"])
                 # print("  Detected Area:", pothole_data["DetectionList"])
-                scoreText = str(score)
-                areaText = str(area)
-                scoreText +=  "%_" + areaText
+                scoreText = str(score)+"% "+str(detected)
+                # areaText = str(area)
+                # scoreText +=  "%_" + areaText
                 x, y, w, h = bbox
                 color = (0, 0, 255)  # Red color
                 thickness = 3
                 imgToSave = img.copy()
                 cv2.rectangle(imgToSave, (x, y), (x + w, y + h), color, thickness)
-                cv2.putText(imgToSave, scoreText, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
+                cv2.putText(imgToSave, scoreText, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 1)
                 cv2.rectangle(temp_img, (x, y), (x + w, y + h), color, thickness)
-                cv2.putText(temp_img, scoreText, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0, 255), 2)
+                cv2.putText(temp_img, scoreText, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0, 255), 1)
                 cv2.rectangle(mask, (x, y), (x + w, y + h), (255,0,0), thickness)
-                cv2.putText(mask, scoreText, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 2, (255,0,0), 2)
-
+                cv2.putText(mask, scoreText, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 1)
+                cv2.rectangle(mask2, (x, y), (x + w, y + h), (255,0,0), -1)
+                cv2.putText(mask2, scoreText, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 1)
         # for bboxes in
                 if save:
                     print("Save TRUE")
@@ -73,11 +77,11 @@ def visualize_potholes(images_dir, masks_dir):
                     if not os.path.exists(save_img):
                         print("mkdir exec")
                         os.mkdir(save_img)
-                    print(nFrame)
-                    save_img = save_img + '/' + frame_id + '_'  + f"{pothole_num}.png"
-                    print("Saving: ", save_img)
-                    cv2.imwrite(save_img, temp_img)
-                    cv2.imwrite(save_img + '/' + frame_id + '_'  + f"{pothole_num}.png", mask)
+                    # print(nFrame)
+                    # save_img = save_img + '/' + frame_id + '_'  + f"{pothole_num}.png"
+                    # print("Saving: ", save_img)
+                    # cv2.imwrite(save_img, temp_img)
+                    # cv2.imwrite(save_img + '/' + frame_id + '_'  + f"{pothole_num}.png", mask)
 
             savePath, filename = os.path.split(images_dir)
             save_img = savePath + '/TestingResults'
@@ -85,8 +89,9 @@ def visualize_potholes(images_dir, masks_dir):
                 os.mkdir(save_img)
             # save_img = save_img + '/' + frame_id + '_cracks.png'
             # print("Saving: ", save_img)
-            cv2.imwrite(save_img + '/' + frame_id + '_image.png', temp_img)
-            cv2.imwrite(save_img + '/' + frame_id + '_mask.png', mask)
+            cv2.imwrite(save_img + '/Images/' + frame_id + '_image.png', temp_img)
+            cv2.imwrite(save_img + '/Masks/' + frame_id + '_mask.png', mask)
+            cv2.imwrite(save_img + '/Filled/' + frame_id + '_mask_filled.png', mask2)
             
             
             

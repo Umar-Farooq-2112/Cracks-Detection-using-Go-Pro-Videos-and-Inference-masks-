@@ -73,11 +73,11 @@ def calculate_iou(box1, box2, image1, image2, show=False):
         iou = intersection_area / union_area
     except:
         iou = 0
-    print("IOU", iou * 100)
-    if iou * 100 > 33:
-        print("IOU IN FUNCTION: ", iou)
-        img1_with_boxes = image1.copy()
-        img2_with_boxes = image2.copy()
+    # print("IOU", iou * 100)
+    # if iou * 100 > 33:
+    #     print("IOU IN FUNCTION: ", iou)
+    #     img1_with_boxes = image1.copy()
+    #     img2_with_boxes = image2.copy()
         # x1y1_br, y1_br
         # cv2.rectangle(img1_with_boxes, (x1_tl, y1_tl), (x1_br, y1_br), (0, 255, 0), 2)
         # cv2.rectangle(img2_with_boxes, (x2_tl, y2_tl), (x2_br, y2_br), (0, 255, 0), 2)
@@ -160,10 +160,13 @@ def calculate_iou_backwards(box1, box2, image1, image2):
     union_area = area_box1 + area_box2 - intersection_area
 
     # Calculate IoU
-    iou = intersection_area / union_area
+    try:
+        iou = intersection_area / union_area
+    except:
+        iou = 0
     # print("IO")
-    if iou >= 0:
-        print("IOU Backwards: ", iou * 100)
+    # if iou >= 0:
+    #     print("IOU Backwards: ", iou * 100)
         # img1_with_boxes = image1.copy()
         # img2_with_boxes = image2.copy()
         #
