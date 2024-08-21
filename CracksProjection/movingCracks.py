@@ -3,7 +3,7 @@ import numpy as np
 import os
 from CracksProjection.projection import forward_projection
 from CracksProjection.iou import calculate_iou,calculate_iou_backwards
-
+from CracksProjection.cracksDictionaryFilter import removeExtraCracks
 
 keyHead = "Potholes"
 box = "bbox"
@@ -152,9 +152,15 @@ def going_forward(bbox_ij, img, nFrame, p,  i, duplicate_list_original, startFra
                 # print("TRUE")
                 nextFrameData = p[keyHead][nextFrame]
                 cntrBoxes = nextFrameData["PotholesData"]
+                
                 if cntrBoxes is not None:
+                    #Trying Umar Filter here
+                    cntrBoxes = removeExtraCracks(transformed_box, image2.shape, cntrBoxes,current_m)
+
+
                     max_adder = False
                     for b in range(0, len(cntrBoxes)):
+                        print("Len of nextFrame boxes: ", len(cntrBoxes))
                         current_box = cntrBoxes[b][box] #xywh
                         print("Comparing with: ", nextFrame, " ", current_box)
 

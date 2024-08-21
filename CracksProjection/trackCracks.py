@@ -3,7 +3,7 @@ import numpy as np
 import json
 from CracksProjection.boundingBox import convert_bbox
 import os
-from CracksProjection.moving_cracks import going_forward,going_forward_only
+from CracksProjection.movingCracks import going_forward,going_forward_only
 
 
 def track_cracks(images_dir, p = {}, old_potholes = {}, save_json = "", old_json_path = "", cropped_path = ""):
