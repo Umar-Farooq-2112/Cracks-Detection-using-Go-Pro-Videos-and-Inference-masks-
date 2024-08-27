@@ -23,8 +23,13 @@ class Crack:
         return np.array([[x,y],[x+w,y+h]],np.int32)
     
     
-img1= "00000017"
-img2= "00000018"
+img1= "00000006"
+img2= "00000007"
+
+if int(img1)>int(img2):
+    img1,img2=img2,img1
+
+
 parent = "Testing"
 json_path = "Testing/potholestracked.json"
 image1 = parent+"/images/"+img1+".png"
@@ -58,9 +63,12 @@ for item in all_cracks[:]:
     transformed_cracks.append(res)
 
 #  Plotting the transformed bounding boxes
-for item in transformed_cracks:
+for i,item in enumerate(transformed_cracks):
     points = np.array(item,np.int32)
+    cv2.polylines(mask1, [all_cracks[i].getBoundingBoxCoordinates()], isClosed=True, color=(0, 0, 0), thickness=2)
     cv2.polylines(mask2, [points], isClosed=True, color=(0, 0, 0), thickness=2)
+    cv2.putText(mask1, str(i), all_cracks[i].getBoundingBoxCoordinates()[0], cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0,255,0), 2)
+    cv2.putText(mask2, str(i), points[0][0], cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0,255,0), 2)
 
 
 cv2.imshow("Mask1",resize_image(mask1,70))
