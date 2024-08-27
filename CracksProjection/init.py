@@ -41,7 +41,6 @@ def compare_two_images(cracks1,cracks2 ,shape_of_image = (1920,1080)):
     
     
     for crack in cracks1['PotholesData']:
-        # print(len(crack))
         bBox = crack['bbox']        
         coordinates = tranformBboxToCoordinates(bBox)
         transformed_box = np.array(coordinates,dtype=np.float32)
