@@ -30,8 +30,6 @@ if __name__ == '__main__':
         os.mkdir(f"{outputDir}/TestingResults/Images")
     if not os.path.exists(f"{outputDir}/TestingResults/Masks"):
         os.mkdir(f"{outputDir}/TestingResults/Masks")
-    if not os.path.exists(f"{outputDir}/TestingResults/Filled"):
-        os.mkdir(f"{outputDir}/TestingResults/Filled")
     if not os.path.exists(f"{outputDir}/Output"):
         os.mkdir(f"{outputDir}/Output")
 
