@@ -40,7 +40,7 @@ if __name__ == '__main__':
 
 
     ### Start the Cracks Dictionary conataining every cracks either unique or duplication 
-    tracked_potholes, old_tracks = track_cracks1(image_dir, mask_dir, old_json)
+    # tracked_potholes, old_tracks = track_cracks1(image_dir, mask_dir, old_json)
     
     #### IF you Hva ealready stored the cracks in the a JSON File, you can just load by executing the 
     #### line below and commenting the line above this comment calling the fucntion track_cracks1()
@@ -52,7 +52,6 @@ if __name__ == '__main__':
     
     ### Start labelling the resulting unique cracks on the images and masks
     visualize_potholes(image_dir, mask_dir)
-
 
     print("Successful...............................")
     

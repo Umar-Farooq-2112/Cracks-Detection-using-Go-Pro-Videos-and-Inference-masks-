@@ -3,6 +3,7 @@ import numpy as np
 import json
 import pandas as pd
 # from CracksProjection.boundingBox import convert_bbox
+from CracksProjection.cracksCounter import startTracking
 import os
 # from CracksProjection.movingCracks import going_forward,going_forward_only
 from CracksProjection.intersectionOverUnion import calculate_iou
@@ -46,23 +47,30 @@ def compare_two_images(cracks1,cracks2 ,shape_of_image = (1920,1080)):
         transformed_box = np.array(coordinates,dtype=np.float32)
         transformed_box = transformed_box.reshape((-1,1,2))
         transformed_box = cv2.perspectiveTransform(transformed_box,trans_matrix)
-        if not 'parent' in crack:
-            crack['parent'] = None
+        if not 'parent1' in crack:
+            crack['parent1'] = None
+        if not 'parent2' in crack:
+            crack['parent2'] = None
         # if not is_bbox_inside_image_backward(transformed_box,shape_of_image):
         #     continue
         transformed_box = transformed_box.reshape((-1,2))
         transformed_box = transformCoordinatesToMaxCoordinates(transformed_box)
         
         for item in cracks2['PotholesData']:
-            if not 'parent' in item:
-                item['parent'] = None
+            if not 'parent1' in item:
+                item['parent1'] = None
+            if not 'parent2' in item:
+                item['parent2'] = None
             bBox2 = transformCoordinatesToMaxCoordinates(tranformBboxToCoordinates(item['bbox']))
             iou = calculate_iou(transformed_box,bBox2)*100
             if iou > 0:
                 if crack['area']>=item['area']:
-                    item['parent'] = f"{crack['pothole_num']}"
+                    if item['parent1']==None:
+                        item['parent1'] = f"{crack['pothole_num']}"
                 else:
-                    crack['parent'] = f"{crack['pothole_num']}"
+                    if crack['parent2']==None:
+                        crack['parent2'] = f"{item['pothole_num']}"
+
             
     return cracks1,cracks2
 
@@ -91,8 +99,10 @@ def getUniqueCracks(tracked_cracks):
         if len(tracked_cracks['Potholes'][item]['PotholesData'])>0:
             df = pd.DataFrame(tracked_cracks['Potholes'][item]['PotholesData'])
 
-            df = df[df['parent'].isnull()]
+            df = df[df['parent1'].isnull()&df['parent2'].isnull()]
+            df.drop(columns=['parent1','parent2'], inplace=True)
             tracked_cracks['Potholes'][item]['PotholesData'] = df.to_dict(orient="records")
+            
     print("Filtering Unique Cracks Successful............................")
     return tracked_cracks    
 
@@ -100,12 +110,20 @@ def getUniqueCracks(tracked_cracks):
 
 def init(tracked_cracks,result_dir):
     result_dir = os.path.join(result_dir,'ProcessedCracks.json')
-    
+    final_dir = os.path.join(result_dir,'Final.json')
+
+    backup = tracked_cracks.copy()
     tracked_cracks = processingCrackFiltering(tracked_cracks)
-    tracked_cracks = getUniqueCracks(tracked_cracks)
+    unique = getUniqueCracks(tracked_cracks)
     
     with open(result_dir, 'w') as file:
-        json.dump(tracked_cracks, file,indent=4)
+        json.dump(unique, file,indent=4)
+        
+    # final = startTracking(backup,unique)
+    
+    # with open(final_dir, 'w') as file:
+    #     json.dump(final, file,indent=4)
+        
     print("Successful...................................................")
 
 if __name__ == "__main__":
